@@ -6,8 +6,7 @@ algorithms: hillClimbing and simulate annealing
 
 """
 
-
-import copy,time
+import copy,time , math ,random
 
 goal = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']]
 def CreatePuzzle():
@@ -94,4 +93,82 @@ def manhattan(puzzle):
         mDistance += (abs(goalRow - puzzleRow) + abs(goalCol - puzzleCol))
 
     return mDistance
+
+
+def hillClimbing1(puzzle):
+    for i in getSuccessors(puzzle):
+        if manhattan(puzzle) > manhattan(i):
+            puzzle = i
+            printPuzzle(puzzle)
+            hillClimbing1(puzzle)
+            break
+    return puzzle
+
+
+def hillClimbing2(puzzle):
+    heur = []
+    for i in range(0,len(getSuccessors(puzzle))):
+        heur.append(manhattan(getSuccessors(puzzle)[i]))
+    min_h = 0
+    for i in range(0,len(heur)):
+        if heur[i] < heur[min_h] :
+            min_h = i
+    if manhattan(puzzle) > manhattan(getSuccessors(puzzle)[min_h]):
+        puzzle = getSuccessors(puzzle)[min_h]
+        printPuzzle(puzzle)
+        puzzle=hillClimbing2(puzzle)
+    return puzzle
+
+
+
+def schedule(T):
+    return T - T * 0.1
+
+
+def simulatedAnnealing(puzzle,T,i):
+    T = schedule(T)
+    randomInput = random.randint(0, len(getSuccessors(puzzle)) - 1)
+    randomSuccessor = getSuccessors(puzzle)[randomInput]
+
+    E = manhattan(puzzle)-manhattan(randomSuccessor)
+    if E > 0 :
+        puzzle = randomSuccessor
+    elif random.uniform(0,1) < math.exp(E/T):
+        puzzle =randomSuccessor
+
+    printPuzzle(puzzle)
+    if i-1 > 0 :
+        puzzle = simulatedAnnealing(puzzle,T,i-1)
+
+    return puzzle
+
+
+
+
+
+
+
+
+puzzle = CreatePuzzle()
+
+print "enter which algorithm ? \n1-hill climbing with first better heuristic\n2-hill climbing with best heuristic\n3-simulated annealing"
+x=input()
+
+
+if x==1 :
+    puzzle = hillClimbing1(puzzle)
+if x==2 :
+    puzzle = hillClimbing2(puzzle)
+if x==3 :
+    puzzle = simulatedAnnealing(puzzle,100,100)
+
+
+
+
+if isgoal(puzzle):
+    print "\n\n\n\n*************** WE GET THE GOAL *****************\n"
+    printPuzzle(puzzle)
+else:
+    print "\n\n\n\n\goal not achieved :((((((((((\n"
+    printPuzzle(puzzle)
 

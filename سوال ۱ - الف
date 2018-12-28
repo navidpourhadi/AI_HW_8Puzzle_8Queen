@@ -1,0 +1,15 @@
+8 puzzle:
+  hillclimbing with first better heuristic ====> average of wins in 10 problems = 0%
+  
+  hillClimbing with best heuristic in successors =====> average of wins = 30%
+  
+  simulated annealing =====> average of wins = 10%
+  
+  
+8 queens:
+
+    hillclimbing with first better heuristic ====> average of wins in 10 problems = 0%
+
+    hillClimbing with best heuristic in successors =====> average of wins = 10%
+
+    simulated annealing =====> average of wins = 0%

@@ -6,8 +6,8 @@ algorithms: hillClimbing and simulate annealing
 
 """
 
-import random, copy
-import time
+import random, copy , math
+
 
 
 def createChess():
@@ -91,6 +91,8 @@ def HillClimbing1(problem):
         if heuristic(i)<heuristic(problem):
             problem = i;
             printChess(problem)
+            print "heuristic of this step is :" + str(heuristic(problem)) + "\n\n\n\n"
+
             problem = HillClimbing1(problem)
             break
     return problem
@@ -139,7 +141,7 @@ def schedule(t):
 
 
 def simulated_annealing(problem, T, i):
-    T = self.schedule(T)
+    T = schedule(T)
 
     randomInput = random.randint(0, len(getSuccessors(problem)) - 1)
     randomeSuccessor = getSuccessors(problem)[randomInput]
@@ -147,10 +149,11 @@ def simulated_annealing(problem, T, i):
     if (E > 0):
         problem = randomeSuccessor
 
-    elif uniform(0, 1) < math.exp(E / T):
+    elif random.uniform(0, 1) < math.exp(E / T):
         problem = randomeSuccessor
 
     printChess(problem)
+    print "heuristic of this step is :"+str(heuristic(problem))+"\n\n\n\n"
     if heuristic(problem) == 0:
         return problem
     if i - 1 > 0:
@@ -168,7 +171,7 @@ x = input()
 if x == 1 :
     problem=HillClimbing1(problem)
 if x == 3:
-    problem=simulatedAnnealing(problem, 1)
+    problem=simulated_annealing(problem, 100 ,100)
 if x == 2:
     problem=HillClimbing2(problem)
 
@@ -179,5 +182,5 @@ else:
     print "goal not achieved :(((("
 
 printChess(problem)
-print "\n\n\n" + "heuristic of final step is :" + str(heuristic(problem)) + "\n\ncost of this game is :"
+print "\n\n\n" + "heuristic of final step is :" + str(heuristic(problem)) + "\n\n"
 
